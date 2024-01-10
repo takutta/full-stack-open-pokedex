@@ -6,6 +6,7 @@ import PokemonList from './PokemonList'
 import PokemonPage from './PokemonPage'
 import { useApi } from './useApi'
 
+
 const mapResults = (({ results }) => results.map(({ url, name }) => ({
   url,
   name,
