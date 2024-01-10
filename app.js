@@ -9,7 +9,7 @@ app.use(express.static('dist'))
 app.get('/health', (req, res) => {
   res.send('ok')
 })
-// just an another comment
+// just an another commenta
 app.listen(PORT, () => {
   // eslint-disable-next-line no-console
   console.log('server started on port 5000')
