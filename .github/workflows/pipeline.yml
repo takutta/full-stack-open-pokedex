@@ -34,26 +34,21 @@ jobs:
       - name: Deploy to Render
         if: ${{ github.event_name == 'push' && !contains(github.event.head_commit.message, '#skip') }}
         run: curl https://api.render.com/deploy/srv-${{ secrets.RENDER_SERVICE_ID }}?key=${{ secrets.RENDER_API_KEY }}
-      - name: Test Success
+      - name: New version
+        if: ${{ success() && github.event_name == 'push' && !contains(github.event.head_commit.message, '#skip') }}
         uses: rjstone/discord-webhook-notify@v1
-        if: success()
         with:
             severity: info
-            details: Test Succeeded!
+            text: A new version of Pokedex deployed
             webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
-      - name: Test Failure
+
+      - name: Build of Pokedex failed
         uses: rjstone/discord-webhook-notify@v1
         if: failure()
         with:
             severity: error
-            details: Test Failed!
-            webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
-      - name: Test Cancelled
-        uses: rjstone/discord-webhook-notify@v1
-        if: cancelled()
-        with:
-            severity: warn
-            details: Test Cancelled!
+            text: Build failed
+            details: ${{ github.event.repository.html_url }}/commit/${{ github.sha }} by ${{ github.actor }} "${{ github.event.head_commit.message }}"
             webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
 
   tag_release:
